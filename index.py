@@ -32,6 +32,15 @@ def userid(id):
 		return json.dumps(record)
 	 
 
+@app.route('/location/<id>', methods=['POST', 'GET'])
+def location(id):
+	if request.method == "POST":
+		data = json.loads(request.data)
+		mongo.db.users.update({"_id": ObjectId(id)}, {"$set" : {"lang" : data['lang'], "long" : data['long']}})
+		return ""
+	elif request.method == "GET"
+		pass
+
 
 
 
