@@ -1,5 +1,5 @@
 import json
-
+import os
 from flask              import Flask, request, Response
 from flask.ext.pymongo  import PyMongo
 from werkzeug.routing   import BaseConverter
@@ -14,7 +14,8 @@ class ObjectIdConverter(BaseConverter):
 def user_location(id):
   return {"Location": "/users/" + str(id)}
 
-app = Flask(__name__)
+app = Flask("app19727643")
+app.config['MONGO_URI'] = os.getenv("MONGOHQ_URL", "mongodb://localhost:27017/index")
 app.url_map.converters['objectid'] = ObjectIdConverter
 mongo = PyMongo(app)
 
