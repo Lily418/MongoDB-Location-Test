@@ -21,8 +21,20 @@ mongo = PyMongo(app)
 #curl -H "Content-Type: application/json" --data '{"user":"Joel"}' http://127.0.0.1:5000/users/
 @app.route('/users', methods=['GET'])
 def users_get():
+  query = {}
   users = []
-  for user in mongo.db.users.find():
+
+  longitude = request.args.get("long")
+  latitude = request.args.get("lat")
+  limit = request.args.get("limit")
+  limit = int(limit) if limit else None
+
+  if (longitude and latitude):
+    query["loc"] = {
+      "$near": [latitude, longitude]
+    }
+
+  for user in mongo.db.users.find(query, limit=limit):
     user['_id'] = str(user['_id'])
     users.append(user)
   return json.dumps(users)
