@@ -26,7 +26,7 @@ def users_get():
   longitude = request.args.get("long")
   latitude = request.args.get("lat")
   limit = request.args.get("limit")
-  limit = int(limit) if limit else None
+  limit = int(limit) if limit else 0
 
   if (longitude and latitude):
     query["loc"] = {
