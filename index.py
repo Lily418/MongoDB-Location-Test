@@ -4,6 +4,7 @@ from flask              import Flask, request, Response
 from flask.ext.pymongo  import PyMongo
 from werkzeug.routing   import BaseConverter
 from bson.objectid      import ObjectId
+from pymongo            import GEO2D
 
 class ObjectIdConverter(BaseConverter):
   def to_python(self, value):
@@ -28,6 +29,7 @@ def users_get():
 
 @app.route('/users', methods=['POST'])
 def users_post():
+  print(request.data)
   id = mongo.db.users.insert(json.loads(request.data))
   return Response(status=201, headers=user_location(id))
 
@@ -44,6 +46,11 @@ def user_get(id):
 def user_post(id):
   mongo.db.users.update({'_id': id}, {"$set": json.loads(request.data)})
   return ""
+
+@app.route('/createindex')
+def create_index():
+	mongo.db.users.create_index([("loc", GEO2D)])
+
 
 if __name__ == "__main__":
 	app.run(debug=True, port=5000)
